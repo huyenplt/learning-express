@@ -3,6 +3,10 @@ var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
 
 var userRoute = require('./routes/user.route')
+var authRoute = require('./routes/auth.route')
+
+var authMiddleware = require('./middlewares/auth.middleware')
+
 var port = 3000
 
 var app = express()
@@ -22,7 +26,8 @@ app.get('/', (req, res) => {
     // du lieu render o phia server
 })
 
-app.use('/users', userRoute)
+app.use('/users', authMiddleware.requireAuth, userRoute)
+app.use('/auth', authRoute)
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
